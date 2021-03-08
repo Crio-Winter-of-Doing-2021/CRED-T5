@@ -25,13 +25,43 @@ router.post('/signup', require('../middleware/validate'), async (req, res) => {
         const newUser = await pool.query(`INSERT INTO users(user_id, first_name, last_name, email, password) VALUES('${uuidv4()}', '${first_name}', '${last_name}', '${email}', '${password}') RETURNING *`);
 
         // Send back user_id of the registered user
-        res.status(201).send(newUser.rows[0].user_id);
+        res.status(201).send({ user_id: newUser.rows[0].user_id });
 
 
     } catch (err) {
         console.log(err.message);
         res.status(500).send("Internal Sever Error");
     }
-})
+});
+
+router.post('/login', require('../middleware/validate'), async (req, res) => {
+    try {
+        const { first_name, last_name, email, password } = req.body;
+        // check if user exists in database. If not, return status code 401
+        const user = await pool.query(`SELECT * FROM users WHERE email = '${email}'`);
+        if (user.rows.length === 0) {
+            return res.status(401).send("Email or password is incorrect");
+        }
+
+        // if the user exists, match the entered password with the password in database
+        if (user.rows[0].password !== password) {
+            return res.status(401).send("Password Incorrect"); // delete this code and uncomment below code before final submission
+        }
+
+        // # Uncomment the below three lines only when hashing is to be enabled for the passwords
+        // const validPassword = await bcrypt.compare(password, user.rows[0].user_password);
+        // if (!validPassword) {
+        //     return res.status(401).send("Email or password is incorrect");
+        // }
+
+        // Return the jwt token
+        const access_token = jwtGenerator(user.rows[0].user_id);
+        res.status(200).send({ access_token });
+    }
+    catch (err) {
+        console.log(err.message);
+        res.status(500).send("Internal Server Error");
+    }
+});
 
 module.exports = router;
