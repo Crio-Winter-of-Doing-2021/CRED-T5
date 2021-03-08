@@ -16,17 +16,17 @@ router.post('/signup', require('../middleware/validate'), async (req, res) => {
             return res.status(409).send("Email already in use!");
         }
 
-        // If user does not already exist, hash password
-        const saltRound = 10;
-        const salt = await bcrypt.genSalt(saltRound);
-        const bcryptPassword = await bcrypt.hash(password, salt);
+        // If user does not already exist, hash password (do before final deployment)
+        // const saltRound = 10;
+        // const salt = await bcrypt.genSalt(saltRound);
+        // const bcryptPassword = await bcrypt.hash(password, salt);
 
         // Save user in database
-        const newUser = await pool.query(`INSERT INTO users(user_id, first_name, last_name, email, password) VALUES('${uuidv4()}', '${first_name}', '${last_name}', '${email}', '${bcryptPassword}') RETURNING *`);
+        const newUser = await pool.query(`INSERT INTO users(user_id, first_name, last_name, email, password) VALUES('${uuidv4()}', '${first_name}', '${last_name}', '${email}', '${password}') RETURNING *`);
 
-        // Send back jwt token
-        const access_token = jwtGenerator(newUser.rows[0].user_id);
-        res.status(201).json({ access_token });
+        // Send back user_id of the registered user
+        res.status(201).send(newUser.rows[0].user_id);
+
 
     } catch (err) {
         console.log(err.message);
