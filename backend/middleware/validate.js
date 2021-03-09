@@ -13,5 +13,14 @@ module.exports = (req, res, next) => {
             return res.status(400).send("Invalid Email");
         }
     }
+    else if (req.path === '/login') {
+        if (![email, password].every(Boolean)) {
+            return res.status(400).send("Missing Credentials");
+        }
+        else if (!validEmail(email)) {
+            return res.status(400).send("Invalid Email");
+        }
+    }
+
     next();
 }
