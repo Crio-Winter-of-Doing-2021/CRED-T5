@@ -36,7 +36,7 @@ router.post('/signup', require('../middleware/validate'), async (req, res) => {
 
 router.post('/login', require('../middleware/validate'), async (req, res) => {
     try {
-        const { first_name, last_name, email, password } = req.body;
+        const { email, password } = req.body;
         // check if user exists in database. If not, return status code 401
         const user = await pool.query(`SELECT * FROM users WHERE email = '${email}'`);
         if (user.rows.length === 0) {
