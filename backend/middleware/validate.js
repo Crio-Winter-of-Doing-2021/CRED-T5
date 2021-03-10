@@ -7,18 +7,18 @@ module.exports = (req, res, next) => {
 
     if (req.path === '/signup') {
         if (![first_name, email, password].every(Boolean)) {
-            return res.status(400).send("Missing Credentials");
+            return res.status(400).send({message: "Missing Credentials"});
         }
         else if (!validEmail(email)) {
-            return res.status(400).send("Invalid Email");
+            return res.status(400).send({message: "Invalid Email"});
         }
     }
     else if (req.path === '/login') {
         if (![email, password].every(Boolean)) {
-            return res.status(400).send("Missing Credentials");
+            return res.status(400).send({message: "Missing Credentials"});
         }
         else if (!validEmail(email)) {
-            return res.status(400).send("Invalid Email");
+            return res.status(400).send({message: "Invalid Email"});
         }
     }
 
