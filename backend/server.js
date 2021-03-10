@@ -20,6 +20,14 @@ app.get('/', async (req, res) => {
 // SIGNUP AND LOGIN ROUTES (/signup and /login)
 app.use('/', require('./routes/jwtAuth'));
 
+// DASHBOARD ROUTE
+app.use('/cards', require('./routes/cards'));
+
+// 404 ROUTE
+app.use('*', (req,res)=>{
+   return res.sendStatus(404);
+});
+
 const PORT = 8080 || process.env.PORT;
 
 // Express Server
