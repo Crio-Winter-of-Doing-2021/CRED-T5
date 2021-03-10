@@ -9,7 +9,7 @@ router.get('/', auth, async (req, res) => {
         res.status(200).send(user_cards.rows);
     } catch (err) {
         console.log(err.message);
-        res.status(500).send("Internal Server Error");
+        res.status(500).send({ message: "Internal Server Error" });
     }
 });
 

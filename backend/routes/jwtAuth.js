@@ -13,7 +13,7 @@ router.post('/signup', require('../middleware/validate'), async (req, res) => {
         // Check db if user already exists
         const user = await pool.query(`SELECT * FROM users WHERE email = '${email}'`);
         if (user.rows.length) {
-            return res.status(409).send("Email already in use!");
+            return res.status(409).send({ message: "Email already in use!" });
         }
 
         // If user does not already exist, hash password (do before final deployment)
@@ -30,7 +30,7 @@ router.post('/signup', require('../middleware/validate'), async (req, res) => {
 
     } catch (err) {
         console.log(err.message);
-        res.status(500).send("Internal Sever Error");
+        res.status(500).send({ message: "Internal Sever Error" });
     }
 });
 
@@ -40,12 +40,12 @@ router.post('/login', require('../middleware/validate'), async (req, res) => {
         // check if user exists in database. If not, return status code 401
         const user = await pool.query(`SELECT * FROM users WHERE email = '${email}'`);
         if (user.rows.length === 0) {
-            return res.status(401).send("Email or password is incorrect");
+            return res.status(401).send({ message: "Email or password is incorrect" });
         }
 
         // if the user exists, match the entered password with the password in database
         if (user.rows[0].password !== password) {
-            return res.status(401).send("Password Incorrect"); // delete this code and uncomment below code before final submission
+            return res.status(401).send({ message: "Password Incorrect" }); // delete this code and uncomment below code before final submission
         }
 
         // # Uncomment the below three lines only when hashing is to be enabled for the passwords
@@ -60,7 +60,7 @@ router.post('/login', require('../middleware/validate'), async (req, res) => {
     }
     catch (err) {
         console.log(err.message);
-        res.status(500).send("Internal Server Error");
+        res.status(500).send({ message: "Internal Server Error" });
     }
 });
 
