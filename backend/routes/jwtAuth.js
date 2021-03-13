@@ -35,6 +35,7 @@ router.post('/signup', require('../middleware/validate'), async (req, res) => {
 });
 
 router.post('/login', require('../middleware/validate'), async (req, res) => {
+    console.log(req.body);
     try {
         const { email, password } = req.body;
         // check if user exists in database. If not, return status code 401
@@ -63,5 +64,14 @@ router.post('/login', require('../middleware/validate'), async (req, res) => {
         res.status(500).send({ message: "Internal Server Error" });
     }
 });
+
+router.post('/verify', require('../middleware/auth'), async (req, res) => {
+    try {
+        res.json(true);
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).send("Internal Server Error");
+    }
+})
 
 module.exports = router;
