@@ -15,7 +15,7 @@ const checkCardValidity = (card_no, expiry_date) => {
     let expiry_date_match = expiry_date_pattern.exec(expiry_date);
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
-    const currentMonth = currentDate.getMonth();
+    const currentMonth = currentDate.getMonth() + 1;
     const expiryMonth = parseInt(expiry_date.split("/")[0]);
     const expiryYear = parseInt(expiry_date.split("/")[1]);
     if (expiry_date_match === null || expiry_date_match.toString().length !== expiry_date.length || currentYear > expiryYear || (currentYear === expiryYear && currentMonth > expiryMonth) || !(expiryMonth >= 1 && expiryMonth <= 12)) {
@@ -38,5 +38,6 @@ module.exports = (req, res, next) => {
         next();
     } catch (err) {
         console.log(err.message);
+        return res.status(500).send({ message: "Internal Server Error" });
     }
 }

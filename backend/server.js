@@ -25,6 +25,13 @@ app.use('/', require('./routes/jwtAuth'));
 // DASHBOARD ROUTE
 app.use('/cards', require('./routes/cards'));
 
+// STATEMENTS ROUTES
+app.use('/cards/:id/statements', (req, res, next) => {
+   req.card_id = req.params.id;
+   next();
+});
+app.use('/cards/:id/statements', require('./routes/statements'));
+
 // 404 ROUTE
 app.use('*', (req, res) => {
    return res.status(404).send("Not Found");
