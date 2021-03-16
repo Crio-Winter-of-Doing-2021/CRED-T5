@@ -20,7 +20,7 @@ router.post('/signup', require('../middleware/validate'), async (req, res) => {
         // const bcryptPassword = await bcrypt.hash(password, salt);
 
         // Save user in database
-        const newUser = await pool.query(`INSERT INTO users(first_name, last_name, email, password) VALUES('${first_name}', '${last_name}', '${email}', '${password}') RETURNING *`);
+        const newUser = await pool.query(`INSERT INTO users(user_id, first_name, last_name, email, password) VALUES('${uuidv4()}', '${first_name}', '${last_name}', '${email}', '${password}') RETURNING *`);
 
         // Send back user_id of the registered user
         res.status(201).send({ user_id: newUser.rows[0].user_id });
