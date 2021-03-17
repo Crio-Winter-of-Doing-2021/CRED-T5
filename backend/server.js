@@ -32,6 +32,13 @@ app.use('/cards/:id/statements', (req, res, next) => {
 });
 app.use('/cards/:id/statements', require('./routes/statements'));
 
+// PAYMENT ROUTE
+app.use('/cards/:id/pay', (req, res, next) => {
+   req.card_id = req.params.id;
+   next();
+});
+app.use('/cards/:id/pay', require('./routes/pay'));
+
 // 404 ROUTE
 app.use('*', (req, res) => {
    return res.status(404).send("Not Found");
