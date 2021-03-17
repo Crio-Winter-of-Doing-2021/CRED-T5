@@ -12,7 +12,13 @@ router.get('/', auth, async (req, res) => {
             return res.status(404).send({ message: `No card with card_id '${card_id}' found` });
         }
         const cardStatements = await pool.query(`SELECT * FROM statements WHERE statement_card_id = '${card_id}' ORDER BY year DESC, month DESC LIMIT 1`);
-        return res.status(200).send({ statement: cardStatements.rows[0] });
+        if (cardStatements.rows.length > 0) {
+            const transactions = await pool.query(`SELECT * FROM transactions WHERE transaction_statement_id = '${cardStatements.rows[0].statement_id}'`);
+            return res.status(200).send({ statement: cardStatements.rows[0], transactions: transactions.rows });
+        }
+        else {
+            return res.status(200).send({ statement: cardStatements.rows[0] });
+        }
     } catch (err) {
         console.log(err);
         return res.status(500).send({ message: "Internal Server Error" });
