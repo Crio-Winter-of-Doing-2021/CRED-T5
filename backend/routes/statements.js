@@ -29,6 +29,41 @@ router.get('/', auth, async (req, res) => {
     }
 });
 
+// route to get statements by month
+router.get('/:year/:month', auth, async (req, res) => {
+    try {
+        const card_id = req.card_id;
+        const month = req.params.month;
+        const year = req.params.year;
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+        const currentMonth = currentDate.getMonth() + 1;
+        if (year > currentYear || (year == currentYear && month >= currentMonth)) {
+            return res.status(400).send({ message: "Year or month not valid" });
+        }
+        // month is valid, now check card
+        const card = await pool.query(`SELECT * FROM cards WHERE card_id = '${card_id}'`);
+        if (card.rows.length === 0) {
+            return res.status(404).send({ message: `No card with card_id '${card_id}' found` });
+        }
+        // card is valid, now check if statement for the specified month exists
+        const statement = await pool.query(`SELECT * FROM statements WHERE statement_card_id = '${card_id}' AND month = ${month} AND year = ${year}`);
+        if (statement.rows.length === 0) {
+            return res.status(404).send({ message: "No statement for the entered month found" });
+        }
+        // return statement and transactions
+        const transactions = await pool.query(`SELECT transaction_id, amount, type, vendor, category FROM transactions WHERE transaction_statement_id = '${statement.rows[0].statement_id}'`);
+        return res.status(200).send({
+            statement_id: statement.rows[0].statement_id,
+            net_amount: statement.rows[0].net_amount,
+            transactions: transactions.rows
+        });
+    } catch (err) {
+        console.log(err.message);
+        return res.status(500).send("Internal Server Error");
+    }
+})
+
 // route to post statements for cards
 router.post('/:year/:month', validateStatement, async (req, res) => {
     try {
