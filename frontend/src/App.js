@@ -5,9 +5,10 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-d
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Cards from "./components/Cards";
+import Statement from "./components/Statement";
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
   const checkAuthenticated = async () => {
     try {
       const response = await fetch("http://localhost:8080/verify", {
@@ -25,7 +26,7 @@ function App() {
   useEffect(() => {
     const pathname = window.location.pathname;
     console.log(pathname);
-    if(pathname!=="/login" || localStorage.getItem("token")!==null){
+    if (pathname !== "/login" || localStorage.getItem("token") !== null) {
       console.log(localStorage.getItem("token"));
       checkAuthenticated();
     }
@@ -43,32 +44,22 @@ function App() {
     <>
       <Router>
         <Switch>
-          <Route
-            exact path={["/", "/login"]} render={props =>
-              !isAuthenticated ? (
-                <Login {...props} setAuth={setAuth} />
-              ) : (
-                <Redirect to="/cards" />
-              )
-            }
+          <Route exact path={["/", "/login"]} render={props =>
+            !isAuthenticated !== null ? (!isAuthenticated ? <Login {...props} setAuth={setAuth} /> : <Redirect to="/cards" />) : null
+          }
+
           />
-          <Route
-            exact path="/signup" render={props =>
-              !isAuthenticated ? (
-                <Signup {...props} setAuth={setAuth} />
-              ) : (
-                <Redirect to="/cards" />
-              )
-            }
-          />
-          <Route exact path="/cards" render={props =>
-            isAuthenticated ? (
-              <Cards {...props} logout={logout} />
-            ) : (
-              <Redirect to="/login" />
-            )
+          <Route exact path="/signup" render={props =>
+            isAuthenticated !== null ? (!isAuthenticated ? <Signup {...props} setAuth={setAuth} /> : <Redirect to="/cards" />) : null
           }
           />
+          <Route exact path="/cards" render={props =>
+            isAuthenticated !== null ? (isAuthenticated ? <Cards {...props} logout={logout} /> : <Redirect to="/login" />) : null
+          }
+          />
+          <Route exact path="/cards/:id/statements" render={props =>
+            isAuthenticated !== null ? (isAuthenticated ? <Statement {...props} /> : <Redirect to="/login" />) : null
+          } />
         </Switch>
       </Router>
     </>
