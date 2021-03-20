@@ -23,7 +23,7 @@ app.get('/', async (req, res) => {
 app.use('/', require('./routes/jwtAuth'));
 
 // DASHBOARD ROUTE
-app.use('/cards', require('./routes/cards'));
+app.use('/cards', require('./routes/card'));
 
 // STATEMENTS ROUTES
 app.use('/cards/:id/statements', (req, res, next) => {
