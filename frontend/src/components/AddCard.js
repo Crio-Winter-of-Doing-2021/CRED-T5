@@ -33,11 +33,11 @@ export default function AddCard() {
             <button onClick={goBack}>Back</button>
             <form onSubmit={submitForm}>
                 <label>Card No.: </label>
-                <input type="text" value={cardNo} onChange={(e) => setCardNo(e.target.value)} required />
+                <input type="text" placeholder="16 digit card no." value={cardNo} onChange={(e) => setCardNo(e.target.value)} required />
                 <label>Expiry Date: </label>
-                <input type="text" value={expiryDate} onChange={(e) => setExpiryDate(e.target.value)} required />
+                <input type="text" placeholder="MM/YY" value={expiryDate} onChange={(e) => setExpiryDate(e.target.value)} required />
                 <label>Card Holder: </label>
-                <input type="text" value={cardHolder} onChange={(e) => setCardHolder(e.target.value)} required />
+                <input type="text" placeholder="Name on card" value={cardHolder} onChange={(e) => setCardHolder(e.target.value)} required />
                 <button type="submit">Add Card</button>
             </form>
         </>
