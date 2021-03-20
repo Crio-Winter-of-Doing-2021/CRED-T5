@@ -8,14 +8,14 @@ module.exports = (req, res, next) => {
             const token = bearerToken[1];
             jwt.verify(token, process.env.jwtSecret, (err, decoded) => {
                 if (err || bearerToken[0] !== "Bearer") {
-                    return res.status(401).send({message: "Please log in to access this page"});
+                    return res.status(401).send({ message: "Please log in to access this page" });
                 }
                 req.userDataFromJWT = decoded;
                 next();
             });
         }
         else {
-            return res.status(401).send({message: "Unauthorized"});
+            return res.status(401).send({ message: "Unauthorized" });
         }
     } catch (err) {
         console.log(err.message);

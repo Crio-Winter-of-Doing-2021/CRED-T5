@@ -19,9 +19,7 @@ export default function Statement(props) {
                 }
             });
             const parseRes = await response.json();
-            console.log(parseRes);
             const { statement_id, month, year, net_amount } = parseRes;
-            // console.log(statement_transactions);
             setStatement({ statement_id, month, year, net_amount });
             setTransactions(parseRes.transactions);
         } catch (err) {
@@ -36,22 +34,30 @@ export default function Statement(props) {
     }
     return (
         <div>
-            <h3>Statement</h3>
-            <button onClick={buttonClicked}>Back</button>
-            <p>Statement Id: {statement.statement_id}</p>
-            <p>For Card: {card_id}</p>
-            <p>Month: {statement.month}</p>
-            <p>Year: {statement.year}</p>
-            {transactions.map(transaction => {
-                return <div key={transaction.transaction_id} style={{ border: "1px solid black", margin: "2px" }}>
-                    <p>Transaction Id: {transaction.transaction_id}</p>
-                    <p>Amount: {transaction.amount}</p>
-                    <p>Type: {transaction.type === "C" ? "Credit" : "Debit"}</p>
-                    <p>Vendor: {transaction.vendor}</p>
-                    <p>Category: {transaction.category}</p>
+            {(statement && transactions) ? (
+                <div>
+                    <h3>Statement</h3>
+                    <button onClick={buttonClicked}>Back</button>
+                    <p>Statement Id: {statement.statement_id}</p>
+                    <p>For Card: {card_id}</p>
+                    <p>Month: {statement.month}</p>
+                    <p>Year: {statement.year}</p>
+                    {transactions.map(transaction => {
+                        return <div key={transaction.transaction_id} style={{ border: "1px solid black", margin: "2px" }}>
+                            <p>Transaction Id: {transaction.transaction_id}</p>
+                            <p>Amount: {transaction.amount}</p>
+                            <p>Type: {transaction.type === "C" ? "Credit" : "Debit"}</p>
+                            <p>Vendor: {transaction.vendor}</p>
+                            <p>Category: {transaction.category}</p>
+                        </div>
+                    })}
+                    <p>Total Payable amount: {statement.net_amount}</p>
+                </div>) : (
+                <div>
+                    <p>No statements to display for the card</p>
+                    <button onClick={buttonClicked}>Back</button>
                 </div>
-            })}
-            <p>Total Payable amount: {statement.net_amount}</p>
+            )}
         </div>
     )
 }
