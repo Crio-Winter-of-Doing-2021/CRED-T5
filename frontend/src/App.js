@@ -6,6 +6,7 @@ import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Cards from "./components/Cards";
 import Statement from "./components/Statement";
+import AddCard from "./components/AddCard";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -47,7 +48,6 @@ function App() {
           <Route exact path={["/", "/login"]} render={props =>
             !isAuthenticated !== null ? (!isAuthenticated ? <Login {...props} setAuth={setAuth} /> : <Redirect to="/cards" />) : null
           }
-
           />
           <Route exact path="/signup" render={props =>
             isAuthenticated !== null ? (!isAuthenticated ? <Signup {...props} setAuth={setAuth} /> : <Redirect to="/cards" />) : null
@@ -59,6 +59,9 @@ function App() {
           />
           <Route exact path="/cards/:id/statements" render={props =>
             isAuthenticated !== null ? (isAuthenticated ? <Statement {...props} /> : <Redirect to="/login" />) : null
+          } />
+          <Route exact path="/cards/add" render={props =>
+            isAuthenticated !== null ? (isAuthenticated ? <AddCard {...props} /> : <Redirect to="/login" />) : null
           } />
         </Switch>
       </Router>

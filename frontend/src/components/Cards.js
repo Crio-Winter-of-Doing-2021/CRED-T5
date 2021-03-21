@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
+import { useHistory } from 'react-router';
 import Card from './Card';
 export default function Cards({ logout }) {
+    const history = useHistory();
     const [cards, setCards] = useState([]);
     async function getCards() {
         try {
@@ -9,7 +11,7 @@ export default function Cards({ logout }) {
             const response = await fetch('http://localhost:8080/cards', {
                 method: 'GET',
                 headers: {
-                    Authorization: "Bearer " + token
+                    "Authorization": "Bearer " + token
                 }
             });
             const parseRes = await response.json();
@@ -21,9 +23,15 @@ export default function Cards({ logout }) {
     useEffect(() => {
         getCards();
     }, []);
+    const addCard = () => {
+        history.push({
+            pathname: "/cards/add"
+        });
+    }
     return (
         <>
             <button onClick={logout}>Logout</button>
+            <button onClick={addCard}>Add Card</button>
             <h1>Cards</h1>
             <ul>
                 {cards.map(card => {
