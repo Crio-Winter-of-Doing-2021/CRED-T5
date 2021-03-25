@@ -48,7 +48,7 @@ app.use('/cards/:id/pay', require('./routes/pay'));
 
 // 404 ROUTE
 app.use('*', (req, res) => {
-   return res.status(404).send("Not Found");
+   return res.status(404).send({ message: "Not Found" });
 });
 
 const PORT = 8080 || process.env.PORT;
