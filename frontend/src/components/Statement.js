@@ -28,9 +28,15 @@ export default function Statement(props) {
     }
     useEffect(() => {
         getStatement();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     const buttonClicked = () => {
         history.goBack();
+    }
+    const viewSmart = () => {
+        history.push({
+            pathname: `/cards/${card_id}/statements/smart`,
+        })
     }
     return (
         <div>
@@ -38,6 +44,7 @@ export default function Statement(props) {
                 <div>
                     <h3>Statement</h3>
                     <button onClick={buttonClicked}>Back</button>
+                    <button onClick={viewSmart}>Smart View</button>
                     <p>Statement Id: {statement.statement_id}</p>
                     <p>For Card: {card_id}</p>
                     <p>Month: {statement.month}</p>
