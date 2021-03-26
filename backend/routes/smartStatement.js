@@ -3,10 +3,10 @@ const { response } = require('express');
 const pool = require('../db');
 const auth = require('../middleware/auth');
 
-router.get('/merchants', auth, async (req, res) => {
+router.get('/', auth, async (req, res) => {
     try {
         const card_id = req.card_id;
-        console.log(card_id);
+        // console.log(card_id);
         const card = await pool.query(`SELECT * FROM cards WHERE card_id = '${card_id}'`);
         if (card.rows.length === 0) {
             return res.status(404).send({ message: `No card with card_id '${card_id}' found` });
@@ -16,7 +16,7 @@ router.get('/merchants', auth, async (req, res) => {
             return res.status(404).send({ message: "No statements found" });
         }
         const statement_id = statement.rows[0].statement_id;
-        const transactions = await pool.query(`SELECT merchant, amount FROM transactions WHERE transaction_statement_id = '${statement_id}' AND type = 'D'`);
+        const transactions = await pool.query(`SELECT * FROM transactions WHERE transaction_statement_id = '${statement_id}' AND type = 'D'`);
         // res.status(200).send(transactions.rows);
         const merchants = transactions.rows;
         const merchants_smart_obj = {};
@@ -44,27 +44,6 @@ router.get('/merchants', auth, async (req, res) => {
             // console.log(m);
         })
         merchants_smart.sort((a, b) => (a.percentage < b.percentage) ? 1 : ((a.percentage > b.percentage) ? -1 : ((a.amount_spent < b.amount_spent) ? 1 : -1)));
-        res.status(200).send(merchants_smart);
-
-    } catch (err) {
-        console.log(err.message);
-        res.status(500).send("Internal Server Error");
-    }
-});
-
-router.get('/categories', auth, async (req, res) => {
-    try {
-        const card_id = req.card_id;
-        const card = await pool.query(`SELECT * FROM cards WHERE card_id = '${card_id}'`);
-        if (card.rows.length === 0) {
-            return res.status(404).send({ message: `No card with card_id '${card_id}' found` });
-        }
-        const statement = await pool.query(`SELECT statement_id FROM statements WHERE statement_card_id = '${card_id}' ORDER BY year DESC, month DESC LIMIT 1`);
-        if (statement.rows.length === 0) {
-            return res.status(404).send({ message: "No statements found" });
-        }
-        const statement_id = statement.rows[0].statement_id;
-        const transactions = await pool.query(`SELECT category, amount FROM transactions WHERE transaction_statement_id = '${statement_id}' AND type = 'D'`);
         const categories = transactions.rows;
         const categories_smart_obj = {};
         categories.forEach(c => {
@@ -85,7 +64,8 @@ router.get('/categories', auth, async (req, res) => {
             categories_smart.push({ category: c, amount_spent: sum, count: categories_smart_obj[c].length });
         }
         categories_smart.sort((a, b) => (a.count < b.count) ? 1 : ((a.count > b.count) ? -1 : ((a.amount_spent < b.amount_spent) ? 1 : -1)));
-        res.status(200).send(categories_smart);
+        // console.log({ categories_smart: categories_smart, merchants_smart: merchants_smart })
+        res.status(200).send({ categories_smart: categories_smart, merchants_smart: merchants_smart });
     } catch (err) {
         console.log(err.message);
         res.status(500).send("Internal Server Error");
@@ -93,6 +73,6 @@ router.get('/categories', auth, async (req, res) => {
 });
 
 router.get('*', (req, res) => {
-    res.status(404).send("Not Found");
+    res.status(404).send({ message: "Not Found" });
 })
 module.exports = router;

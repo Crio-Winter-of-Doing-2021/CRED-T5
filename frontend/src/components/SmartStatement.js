@@ -6,9 +6,6 @@ import TopMerchants from './TopMerchants';
 
 export default function SmartStatement() {
     const history = useHistory();
-    const standardView = () => {
-        history.goBack();
-    }
     const [merchants, setMerchants] = useState([]);
     const [categories, setCategories] = useState([]);
     const location = useLocation();
@@ -17,24 +14,19 @@ export default function SmartStatement() {
     const getSmartDataMerchants = async () => {
         try {
             const token = await localStorage.token;
-            const responseMerchants = await fetch(`http://localhost:8080/cards/${card_id}/statements/smart/merchants`, {
+            const response = await fetch(`http://localhost:8080/cards/${card_id}/statements/smart`, {
                 method: 'GET',
                 headers: {
                     Authorization: "Bearer " + token
                 }
             });
-            const parseResMerchants = await responseMerchants.json();
-            // console.log(parseResMerchants);
-            const responseCategories = await fetch(`http://localhost:8080/cards/${card_id}/statements/smart/categories`, {
-                method: 'GET',
-                headers: {
-                    Authorization: "Bearer " + token
-                }
-            });
-            const parseResCategories = await responseCategories.json();
+            const parseRes = await response.json();
+            // console.log(parseRes);
+            const resMerchants = parseRes.merchants_smart;
+            const resCategories = parseRes.categories_smart;
             // console.log(parseResCategories);
-            setMerchants(parseResMerchants);
-            setCategories(parseResCategories);
+            setMerchants(resMerchants);
+            setCategories(resCategories);
         } catch (err) {
             console.log(err.message);
         }
@@ -42,7 +34,10 @@ export default function SmartStatement() {
     useEffect(() => {
         getSmartDataMerchants();
         // eslint-disable-next-line
-    }, [])
+    }, []);
+    const standardView = () => {
+        history.push(`/cards/${card_id}/statements`);
+    }
     return (
         <>
             <button onClick={standardView}>Standard View</button>

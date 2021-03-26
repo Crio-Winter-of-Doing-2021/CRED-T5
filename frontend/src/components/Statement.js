@@ -31,7 +31,7 @@ export default function Statement(props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     const buttonClicked = () => {
-        history.goBack();
+        history.push("/cards");
     }
     const viewSmart = () => {
         history.push({
