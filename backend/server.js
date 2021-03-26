@@ -25,6 +25,13 @@ app.use('/', require('./routes/jwtAuth'));
 // DASHBOARD ROUTE
 app.use('/cards', require('./routes/card'));
 
+// SMART STATEMENT ROUTES
+app.use('/cards/:id/statements/smart', (req, res, next) => {
+   req.card_id = req.params.id;
+   next();
+});
+app.use('/cards/:id/statements/smart', require('./routes/smartStatement'));
+
 // STATEMENTS ROUTES
 app.use('/cards/:id/statements', (req, res, next) => {
    req.card_id = req.params.id;

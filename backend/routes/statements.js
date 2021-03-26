@@ -15,7 +15,7 @@ router.get('/', auth, async (req, res) => {
         if (cardStatements.rows.length === 0) {
             return res.status(404).send({ message: "No statements found" });
         }
-        const transactions = await pool.query(`SELECT transaction_id, amount, type, vendor, category FROM transactions WHERE transaction_statement_id = '${cardStatements.rows[0].statement_id}'`);
+        const transactions = await pool.query(`SELECT transaction_id, amount, type, merchant, category FROM transactions WHERE transaction_statement_id = '${cardStatements.rows[0].statement_id}'`);
         return res.status(200).send({
             statement_id: cardStatements.rows[0].statement_id,
             month: cardStatements.rows[0].month,
@@ -38,7 +38,7 @@ router.get('/:year/:month', auth, async (req, res) => {
         const currentDate = new Date();
         const currentYear = currentDate.getFullYear();
         const currentMonth = currentDate.getMonth() + 1;
-        if (year > currentYear || (year == currentYear && month >= currentMonth)) {
+        if (year > currentYear || (year == currentYear && month >= currentMonth) || (month <= 0) || (month > 12)) {
             return res.status(400).send({ message: "Year or month not valid" });
         }
         // month is valid, now check card
@@ -52,7 +52,7 @@ router.get('/:year/:month', auth, async (req, res) => {
             return res.status(404).send({ message: "No statement for the entered month found" });
         }
         // return statement and transactions
-        const transactions = await pool.query(`SELECT transaction_id, amount, type, vendor, category FROM transactions WHERE transaction_statement_id = '${statement.rows[0].statement_id}'`);
+        const transactions = await pool.query(`SELECT transaction_id, amount, type, merchant, category FROM transactions WHERE transaction_statement_id = '${statement.rows[0].statement_id}'`);
         return res.status(200).send({
             statement_id: statement.rows[0].statement_id,
             net_amount: statement.rows[0].net_amount,
@@ -84,8 +84,8 @@ router.post('/:year/:month', validateStatement, async (req, res) => {
         const statement_id = cardStatment.rows[0].statement_id;
         // insert each transaction into db
         transactions.forEach(async (transaction) => {
-            const { amount, type, vendor, category } = transaction;
-            await pool.query(`INSERT INTO transactions(amount, type, vendor, category, transaction_statement_id) VALUES(${amount}, '${type}', '${vendor}', '${category}', '${statement_id}')`);
+            const { amount, type, merchant, category } = transaction;
+            await pool.query(`INSERT INTO transactions(amount, type, merchant, category, transaction_statement_id) VALUES(${amount}, '${type}', '${merchant}', '${category}', '${statement_id}')`);
         });
         // update outstanding amount
         const currentOutstanding = await pool.query(`SELECT outstanding_amount FROM cards WHERE card_id = '${statement_card_id}'`);
