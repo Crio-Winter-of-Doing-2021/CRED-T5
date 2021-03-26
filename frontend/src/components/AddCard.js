@@ -1,11 +1,12 @@
 import React from 'react';
 import { useState } from 'react'
-import { useHistory } from 'react-router';
+import { Redirect, useHistory } from 'react-router';
 export default function AddCard() {
     const history = useHistory();
     const [cardNo, setCardNo] = useState('');
     const [cardHolder, setCardHolder] = useState('');
     const [expiryDate, setExpiryDate] = useState('');
+    const [cardAdded, setCardAdded] = useState(false);
     const submitForm = async (e) => {
         e.preventDefault();
         try {
@@ -21,6 +22,8 @@ export default function AddCard() {
             });
             const parseRes = await response.json();
             console.log(parseRes);
+            if (parseRes.message === undefined)
+                setCardAdded(true);
         } catch (err) {
             console.log(err.message);
         }
@@ -39,6 +42,7 @@ export default function AddCard() {
                 <label>Card Holder: </label>
                 <input type="text" placeholder="Name on card" value={cardHolder} onChange={(e) => setCardHolder(e.target.value)} required />
                 <button type="submit">Add Card</button>
+                {cardAdded && <Redirect to={{ pathname: "/cards" }} />}
             </form>
         </>
     )
