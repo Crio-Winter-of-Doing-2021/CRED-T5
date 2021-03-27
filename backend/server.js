@@ -51,7 +51,7 @@ app.use('*', (req, res) => {
    return res.status(404).send({ message: "Not Found" });
 });
 
-const PORT = 8080 || process.env.PORT;
+const PORT = process.env.PORT || 8080;
 
 // Express Server
 app.listen(PORT, () => {
