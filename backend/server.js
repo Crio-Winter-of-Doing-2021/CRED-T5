@@ -45,12 +45,12 @@ cron.schedule('* * * * *', async () => {
             const transporter = nodemailer.createTransport({
                service: 'gmail',
                auth: {
-                  user: 'jtdoe0301@gmail.com',
-                  pass: 'johndoe123'
+                  user: process.env.NODEMAILER_AUTH_EMAIL,
+                  pass: process.env.NODEMAILER_AUTH_PASS
                }
             });
             const mailOptions = {
-               from: 'jtdoe0301@gmail.com',
+               from: process.env.NODEMAILER_AUTH_EMAIL,
                to: send_to_email,
                subject: 'Reminder for paying bill before due date',
                text: 'This is a reminder'
