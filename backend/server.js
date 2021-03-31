@@ -38,8 +38,8 @@ cron.schedule('* * * * *', async () => {
          try {
             // reminer contains reminder_time, card_id and reminder_id
             // now first extract user_id for the card_id
-            const user = await pool.query(`SELECT card_user_id FROM cards WHERE card_id = '${reminder.reminder_card_id}'`);
-            const user_email = await pool.query(`SELECT email FROM users WHERE user_id = '${user.rows[0].card_user_id}'`);
+            const cardRes = await pool.query(`SELECT * FROM cards WHERE card_id = '${reminder.reminder_card_id}'`);
+            const user_email = await pool.query(`SELECT email FROM users WHERE user_id = '${cardRes.rows[0].card_user_id}'`);
             // console.log(user_email.rows[0].email);
             const send_to_email = user_email.rows[0].email;
             const transporter = nodemailer.createTransport({
@@ -53,7 +53,7 @@ cron.schedule('* * * * *', async () => {
                from: process.env.NODEMAILER_AUTH_EMAIL,
                to: send_to_email,
                subject: 'Reminder for paying bill before due date',
-               text: 'This is a reminder'
+               text: `This is a reminder to pay an outstanding of ${cardRes.rows[0].outstanding_amount} INR against your credit card ${cardRes.rows[0].card_no}.`
             };
             transporter.sendMail(mailOptions, function (error, info) {
                if (error) {

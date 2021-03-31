@@ -6,8 +6,8 @@ const validateTime = require('../middleware/validateTime');
 router.post('/', auth, validateTime, async (req, res) => {
     try {
         const card_id = req.card_id;
-        const { time } = req.body;
-        const reminder = await pool.query(`INSERT INTO reminder_schedule(reminder_time, reminder_card_id) VALUES('${time}','${card_id}') RETURNING *`);
+        const { reminder_time } = req.body;
+        const reminder = await pool.query(`INSERT INTO reminder_schedule(reminder_time, reminder_card_id) VALUES('${reminder_time}','${card_id}') RETURNING *`);
         return res.status(201).send({ reminder_id: reminder.rows[0].reminder_id });
     } catch (err) {
         console.log(err.message);

@@ -7,9 +7,9 @@ export default function Reminder({ card_id, reminderButton, setReminderExists })
     const setReminder = async (e) => {
         e.preventDefault();
         try {
-            const time = `${date}-${hours}-${minutes}`;
-            console.log(time);
-            const body = { card_id: card_id, time: time };
+            const reminder_time = `${date}-${hours}-${minutes}`;
+            // console.log(reminder_time);
+            const body = { card_id: card_id, reminder_time: reminder_time };
             const token = localStorage.token;
             const response = await fetch(`http://localhost:8080/cards/${card_id}/reminder`, {
                 method: "POST",
