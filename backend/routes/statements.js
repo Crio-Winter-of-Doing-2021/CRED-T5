@@ -33,8 +33,8 @@ router.get('/', auth, async (req, res) => {
 router.get('/:year/:month', auth, async (req, res) => {
     try {
         const card_id = req.card_id;
-        const month = req.params.month;
-        const year = req.params.year;
+        const month = parseInt(req.params.month);
+        const year = parseInt(req.params.year);
         const currentDate = new Date();
         const currentYear = currentDate.getFullYear();
         const currentMonth = currentDate.getMonth() + 1;
@@ -53,6 +53,7 @@ router.get('/:year/:month', auth, async (req, res) => {
         }
         // return statement and transactions
         const transactions = await pool.query(`SELECT transaction_id, amount, type, merchant, category FROM transactions WHERE transaction_statement_id = '${statement.rows[0].statement_id}'`);
+        // console.log(transactions.rows);
         return res.status(200).send({
             statement_id: statement.rows[0].statement_id,
             net_amount: statement.rows[0].net_amount,
