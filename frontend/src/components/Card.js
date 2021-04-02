@@ -65,7 +65,7 @@ export default function Card({ card }) {
             <p>Card holder: {card.name_on_card}</p>
             <p>Expiry Date: {card.expiry_date}</p>
             <p>Outstanding: &#8377; {card.outstanding_amount}</p>
-            <button onClick={payBill}>Pay Bill</button>
+            <button disabled={!card.outstanding_amount} onClick={payBill}>Pay Bill</button>
             <button onClick={buttonClicked}>View Statements</button>
             {reminderExists ? (<button onClick={deleteReminder}>Delete Reminder</button>
             ) : (

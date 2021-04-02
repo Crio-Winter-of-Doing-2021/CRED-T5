@@ -11,12 +11,13 @@ export default function Statement(props) {
     const [statement, setStatement] = useState({});
     const [transactions, setTransactions] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
-    const [search, setSearch] = useState('');
-    const [toggleSmartView, setToggleSmartView] = useState(false);
+    const [searchMonth, setSearchMonth] = useState('');
+    const [searchYear, setSearchYear] = useState('');
+    const [toggleSmartView, setToggleSmartView] = useState(true);
     async function getStatement() {
         try {
             const token = await localStorage.token;
-            if (search === '') {
+            if ((searchYear + searchMonth) === '') {
                 const response = await fetch(`http://localhost:8080/cards/${card_id}/statements`, {
                     method: 'GET',
                     headers: {
@@ -30,7 +31,7 @@ export default function Statement(props) {
                 setTransactions(parseRes.transactions);
             }
             else {
-                const response = await fetch(`http://localhost:8080/cards/${card_id}/statements/${search}`, {
+                const response = await fetch(`http://localhost:8080/cards/${card_id}/statements/${searchYear}/${searchMonth}`, {
                     method: 'GET',
                     headers: {
                         Authorization: "Bearer " + token
@@ -39,15 +40,11 @@ export default function Statement(props) {
                 const parseRes = await response.json();
                 // console.log(parseRes.message);
                 setErrorMessage(parseRes.message);
-                console.log(errorMessage);
                 const { statement_id, net_amount } = parseRes;
-                // console.log(search);
-                const byDate = search.split("/");
-                // console.log(byDate);
-                const month = parseInt(byDate[1]);
-                const year = parseInt(byDate[0]);
+                const month = searchMonth;
+                const year = searchYear;
                 setStatement({ statement_id, month, year, net_amount });
-                console.log(parseRes.transactions);
+                // console.log(parseRes.transactions);
                 setTransactions(parseRes.transactions);
             }
         } catch (err) {
@@ -57,7 +54,7 @@ export default function Statement(props) {
     useEffect(() => {
         getStatement();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [search])
+    }, [searchYear, searchMonth])
     const buttonClicked = () => {
         history.push("/cards");
     }
@@ -70,13 +67,28 @@ export default function Statement(props) {
     }
     return (
         <div>
-            {search !== '' || (statement && transactions) ? (
+            {(searchYear + searchMonth) !== '' || (statement && transactions) ? (
                 <div>
                     <h3>Statement</h3>
                     <button onClick={buttonClicked}>Back</button>
                     <button onClick={viewSmart}>{toggleSmartView ? "Smart View" : "Standard View"}</button>
-                    <input placeholder="YYYY/MM" value={search} onChange={(e) => setSearch(e.target.value)} />
-                    {(search === '') && <p><b>Showing the most recent statement</b></p>}
+                    <select name="dates" id="dates" onChange={(e) => setSearchMonth(e.target.value)}>
+                        <option value='' >Select Month</option>
+                        <option value="01">January</option>
+                        <option value="02">February</option>
+                        <option value="03">March</option>
+                        <option value="04">April</option>
+                        <option value="05">May</option>
+                        <option value="06">June</option>
+                        <option value="07">July</option>
+                        <option value="08">August</option>
+                        <option value="09">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                    <input placeholder="YYYY" value={searchYear} onChange={(e) => setSearchYear(e.target.value)} />
+                    {((searchYear + searchMonth) === '') && <p><b>Showing the most recent statement</b></p>}
                     {(statement && transactions) ? (
                         (toggleSmartView) ? (<div>
                             <p>Statement Id: {statement.statement_id}</p>
@@ -96,7 +108,7 @@ export default function Statement(props) {
                             })}
                             <p>Total Payable amount: {statement.net_amount}</p>
                         </div>) : (
-                            <SmartStatement search={search} />
+                            <SmartStatement searchMonth={searchMonth} searchYear={searchYear} />
                         )
                     ) : (
                         <p>{(errorMessage === "Not Found") ? "No statements present for entered month" : errorMessage}</p>
