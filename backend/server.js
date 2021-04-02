@@ -30,7 +30,7 @@ cron.schedule('* * * * *', async () => {
       if (day_of_month.length === 1) day_of_month = "0" + day_of_month;
       if (minutes.length === 1) minutes = "0" + minutes;
       const currentTime = `${day_of_month}-${hour}-${minutes}`;
-      console.log(currentTime);
+      // console.log(currentTime);
       const data = await pool.query(`SELECT * FROM reminder_schedule WHERE reminder_time = '${currentTime}'`);
       // console.log(data.rows);
       const scheduled_reminders = data.rows;
