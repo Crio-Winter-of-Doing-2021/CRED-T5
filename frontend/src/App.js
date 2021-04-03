@@ -29,9 +29,8 @@ function App() {
   };
   useEffect(() => {
     const pathname = window.location.pathname;
-    console.log(pathname);
-    if (pathname !== "/login" || localStorage.getItem("token") !== null) {
-      console.log(localStorage.getItem("token"));
+    // console.log(pathname);
+    if ((pathname !== "/login") || (localStorage.getItem("token") !== "undefined")) {
       checkAuthenticated();
     }
   }, []);
