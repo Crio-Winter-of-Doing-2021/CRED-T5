@@ -5,7 +5,6 @@ import CreditCard from './CreditCard';
 import { Grid, Button } from '@material-ui/core';
 
 export default function Cards({ logout }) {
-    const history = useHistory();
     const [cards, setCards] = useState([]);
     async function getCards() {
         try {
@@ -17,7 +16,9 @@ export default function Cards({ logout }) {
                 }
             });
             const parseRes = await response.json();
-            setCards(parseRes);
+            if (parseRes.message === undefined)
+                setCards(parseRes);
+            else setCards([]);
         } catch (err) {
             console.error(err.message);
         }

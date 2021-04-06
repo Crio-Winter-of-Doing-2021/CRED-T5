@@ -30,6 +30,7 @@ export default function AddCard({ logout }) {
     const [errorMessage, setErrorMessage] = useState('');
     const [cardHolder, setCardHolder] = useState('');
     const [expiryDate, setExpiryDate] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
     const [cardAdded, setCardAdded] = useState(false);
     const submitForm = async (e) => {
         e.preventDefault();

@@ -42,6 +42,7 @@ export default function Signup({ setAuth }) {
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [goToLogin, setGoToLogin] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
     const submitForm = async (e) => {
         e.preventDefault();
         try {
