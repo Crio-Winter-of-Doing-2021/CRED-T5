@@ -12,7 +12,7 @@ const checkValidity = async (card_id, reminder_time) => {
     if (cardData.rows.length === 0) {
         return { status: "INVALID CARD ID" };
     }
-    const checkAlreadyExists = await pool.query(`SELECT * FROM reminder_schedule WHERE reminder_card_id = '${card_id}'`);
+    const checkAlreadyExists = await pool.query(`SELECT * FROM reminders WHERE reminder_card_id = '${card_id}'`);
     if (checkAlreadyExists.rows.length) {
         return { status: "CONFLICT" };
     }

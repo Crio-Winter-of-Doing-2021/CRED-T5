@@ -31,7 +31,7 @@ cron.schedule('* * * * *', async () => {
       if (minutes.length === 1) minutes = "0" + minutes;
       const currentTime = `${day_of_month}-${hour}-${minutes}`;
       // console.log(currentTime);
-      const data = await pool.query(`SELECT * FROM reminder_schedule WHERE reminder_time = '${currentTime}'`);
+      const data = await pool.query(`SELECT * FROM reminders WHERE reminder_time = '${currentTime}'`);
       // console.log(data.rows);
       const scheduled_reminders = data.rows;
       scheduled_reminders.forEach(async (reminder) => {
@@ -108,6 +108,9 @@ app.use('/cards/:id/reminder', (req, res, next) => {
    next();
 });
 app.use('/cards/:id/reminder', require('./routes/reminder'));
+
+// REWARDS ROUTE
+app.use('/rewards', require('./routes/reward'));
 
 // 404 ROUTE
 app.use('*', (req, res) => {

@@ -21,6 +21,7 @@ router.get('/', auth, async (req, res) => {
             month: cardStatements.rows[0].month,
             year: cardStatements.rows[0].year,
             net_amount: cardStatements.rows[0].net_amount,
+            due_date: cardStatements.rows[0].due_date,
             transactions: transactions.rows
         });
     } catch (err) {
@@ -57,6 +58,7 @@ router.get('/:year/:month', auth, async (req, res) => {
         return res.status(200).send({
             statement_id: statement.rows[0].statement_id,
             net_amount: statement.rows[0].net_amount,
+            due_date: statement.rows[0].due_date,
             transactions: transactions.rows
         });
     } catch (err) {
@@ -68,7 +70,7 @@ router.get('/:year/:month', auth, async (req, res) => {
 // route to post statements for cards
 router.post('/:year/:month', validateStatement, async (req, res) => {
     try {
-        const { net_amount, transactions } = req.body;
+        const { net_amount, transactions, due_date } = req.body;
         const { month, year } = req.params;
         const statement_card_id = req.card_id;
         const card = await pool.query(`SELECT * FROM cards WHERE card_id = '${statement_card_id}'`);
@@ -81,7 +83,7 @@ router.post('/:year/:month', validateStatement, async (req, res) => {
             return res.status(409).send({ message: "Statement for specified month already exists for the card" });
         }
         // insert statement into db
-        const cardStatment = await pool.query(`INSERT INTO statements(month, year, net_amount, statement_card_id) VALUES(${month}, ${year}, ${net_amount}, '${statement_card_id}') RETURNING *`);
+        const cardStatment = await pool.query(`INSERT INTO statements(month, year, net_amount, due_date, statement_card_id) VALUES(${month}, ${year}, ${net_amount}, '${due_date}', '${statement_card_id}') RETURNING *`);
         const statement_id = cardStatment.rows[0].statement_id;
         // insert each transaction into db
         transactions.forEach(async (transaction) => {
