@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Reminder from './Reminder';
+import { default as CreditCards } from "react-credit-cards";
+import "react-credit-cards/es/styles-compiled.css";
+import { Card } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 
-export default function Card({ card }) {
+export default function CreditCard({ card }) {
     const history = useHistory();
     const [reminderExists, setReminderExists] = useState(false);
     const [setReminder, setSetReminder] = useState(false);
@@ -60,18 +64,22 @@ export default function Card({ card }) {
         }
     };
     return (
-        <div style={{ border: "1px solid black" }}>
-            <p>Card No.: {card.card_no}</p>
-            <p>Card holder: {card.name_on_card}</p>
-            <p>Expiry Date: {card.expiry_date}</p>
+        <Card variant="outlined">
+            <CreditCards
+                cvc=''
+                expiry={card.expiry_date}
+                focus=''
+                name={card.name_on_card}
+                number={card.card_no}
+            />
             <p>Outstanding: &#8377; {card.outstanding_amount}</p>
             <button disabled={!card.outstanding_amount} onClick={payBill}>Pay Bill</button>
             <button onClick={buttonClicked}>View Statements</button>
             {reminderExists ? (<button onClick={deleteReminder}>Delete Reminder</button>
             ) : (
-                <button onClick={reminderButton}>{!setReminder ? "Set Reminder" : "Cancel"}</button>
+                <Button variant="outlined" onClick={reminderButton}>{!setReminder ? "Set Reminder" : "Cancel"}</Button>
             )}
-            {setReminder && <Reminder card_id={card.card_id} reminderButton={reminderButton} setReminderExists={setReminderExists}/>}
-        </div >
+            {setReminder && <Reminder card_id={card.card_id} reminderButton={reminderButton} setReminderExists={setReminderExists} />}
+        </Card>
     )
 }

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useHistory } from 'react-router';
-import Card from './Card';
+import Card from './CreditCard';
 export default function Cards({ logout }) {
     const history = useHistory();
     const [cards, setCards] = useState([]);

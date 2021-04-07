@@ -35,7 +35,7 @@ export default function Login({ setAuth }) {
                 color="primary"
                 align="justify"
             >
-                Sign In
+                Welcome Back!
             </Typography>
             <form onSubmit={submitForm} autoComplete="off">
                 {showError && <p style={{ color: "red" }}>{showError}</p>}
