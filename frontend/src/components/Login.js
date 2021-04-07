@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Button, Typography, Container } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 
-export default function Login({setAuth}) {
+export default function Login({ setAuth }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showError, setShowError] = useState('');
@@ -15,8 +17,8 @@ export default function Login({setAuth}) {
                 body: JSON.stringify(body)
             });
             const parseRes = await response.json();
-            if(parseRes.message === undefined)setAuth(true);
-            else{
+            if (parseRes.message === undefined) setAuth(true);
+            else {
                 setShowError(parseRes.message);
                 setAuth(false);
             }
@@ -26,17 +28,29 @@ export default function Login({setAuth}) {
         }
     }
     return (
-        <>
-            <h1>Login Page</h1>
-            <form onSubmit={submitForm}>
-                {showError && <p style={{color:"red"}}>{showError}</p>}
-                <label>Email: </label>
-                <input type="email" value={email} onChange={(e) => { setEmail(e.target.value) }} required />
-                <label>Password: </label>
-                <input type="password" onChange={(e) => { setPassword(e.target.value) }} required />
-                <button type="submit">Login</button>
+        <Container>
+            <Typography
+                variant="h4"
+                component="h1"
+                color="primary"
+                align="justify"
+            >
+                Sign In
+            </Typography>
+            <form onSubmit={submitForm} autoComplete="off">
+                {showError && <p style={{ color: "red" }}>{showError}</p>}
+                <TextField id="outlined-basic" fullWidth size="small" label="Email" variant="outlined" type="email" value={email} onChange={(e) => { setEmail(e.target.value) }} required />
+                <TextField id="outlined-basic" fullWidth size="small" label="Password" variant="outlined" type="password" onChange={(e) => { setPassword(e.target.value) }} required />
+                <Button
+                    type="submit"
+                    color="primary"
+                    variant="contained"
+                    justify="center"
+                >
+                    Sign In
+                </Button>
             </form>
             <Link to="./signup">Signup</Link>
-        </>
+        </Container>
     );
 }
