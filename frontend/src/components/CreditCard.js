@@ -5,6 +5,7 @@ import { default as CreditCards } from "react-credit-cards";
 import "react-credit-cards/es/styles-compiled.css";
 import { Card } from '@material-ui/core';
 import { Button } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 
 export default function CreditCard({ card }) {
     const history = useHistory();
@@ -64,7 +65,7 @@ export default function CreditCard({ card }) {
         }
     };
     return (
-        <Card variant="outlined">
+        <Card elevation={2}>
             <CreditCards
                 cvc=''
                 expiry={card.expiry_date}
@@ -72,7 +73,9 @@ export default function CreditCard({ card }) {
                 name={card.name_on_card}
                 number={card.card_no}
             />
-            <p>Outstanding: &#8377; {card.outstanding_amount}</p>
+            <Typography color="textSecondary">
+                Outstanding: &#8377; {card.outstanding_amount}
+            </Typography>
             <button disabled={!card.outstanding_amount} onClick={payBill}>Pay Bill</button>
             <button onClick={buttonClicked}>View Statements</button>
             {reminderExists ? (<button onClick={deleteReminder}>Delete Reminder</button>
