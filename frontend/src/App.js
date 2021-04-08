@@ -63,7 +63,7 @@ function App() {
             isAuthenticated !== null ? (isAuthenticated ? <Statement {...props} /> : <Redirect to="/login" />) : null
           } />
           <Route exact path="/cards/add" render={props =>
-            isAuthenticated !== null ? (isAuthenticated ? <AddCard {...props} /> : <Redirect to="/login" />) : null
+            isAuthenticated !== null ? (isAuthenticated ? <AddCard {...props} logout={logout} /> : <Redirect to="/login" />) : null
           } />
           <Route exact path="/cards/:id/statements/smart" render={props =>
             isAuthenticated !== null ? (isAuthenticated ? <SmartStatement {...props} /> : <Redirect to="/login" />) : null
