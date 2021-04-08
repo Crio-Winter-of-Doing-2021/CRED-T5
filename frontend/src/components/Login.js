@@ -25,12 +25,8 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'column',
         alignItems: 'center',
     },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
-    },
     form: {
-        width: '100%', // Fix IE 11 issue.
+        width: '100%',
         marginTop: theme.spacing(1),
     },
     submit: {
@@ -74,7 +70,6 @@ export default function Login({ setAuth }) {
                         Welcome Back! Please Sign In to continue
                     </Typography>
                     <form className={classes.form} onSubmit={submitForm} autoComplete="off">
-                        {showError && <p style={{ color: "red" }}>{showError}</p>}
                         <TextField id="email" fullWidth margin="normal" autoFocus label="Email" variant="outlined" type="email" value={email} onChange={(e) => { setEmail(e.target.value) }} required />
                         <TextField id="password" fullWidth margin="normal" label="Password" variant="outlined" type="password" onChange={(e) => { setPassword(e.target.value) }} required />
                         <Button
@@ -86,6 +81,9 @@ export default function Login({ setAuth }) {
                         >
                             Sign In
                         </Button>
+                        {showError && 
+                        <Typography color="error" align="center" style={{margin:"5px 0px 10px 0px"}}>{showError}</Typography>
+                        }
                         <Grid container>
                             <Grid item xs>
                                 <Link style={{ textDecoration: "none" }} href="#" variant="body2">
