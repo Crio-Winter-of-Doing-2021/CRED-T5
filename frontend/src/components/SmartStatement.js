@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router';
+import { Typography, Container } from '@material-ui/core';
 // import { useHistory } from 'react-router';
 import { useEffect, useState } from 'react';
 import TopCategories from './TopCategories';
@@ -60,12 +61,12 @@ export default function SmartStatement({ searchMonth, searchYear }) {
     return (
         <>
             {(merchants && categories) ? (
-                <div>
-                    <h1>Smart Statement</h1>
+                <Container>
                     <TopMerchants merchants={merchants} />
-                    <TopCategories categories={categories} /></div>
+                    <TopCategories categories={categories} />
+                </Container>
             ) : (
-                <p>No statements found for entered month and year</p>
+                <Typography>No statements found for entered month and year</Typography>
             )
             }
         </>
