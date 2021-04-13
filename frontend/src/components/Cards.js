@@ -24,7 +24,7 @@ export default function Cards({ logout }) {
     }
     useEffect(() => {
         getCards();
-    }, []);
+    }, [cards]);
     const addCard = () => {
         history.push({
             pathname: "/cards/add"

@@ -8,8 +8,7 @@ import Cards from "./components/Cards";
 import Statement from "./components/Statement";
 import AddCard from "./components/AddCard";
 import SmartStatement from "./components/SmartStatement";
-
-import PayBill from "./components/PayBill";
+import NotFound from './components/NotFound';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -68,9 +67,7 @@ function App() {
           <Route exact path="/cards/:id/statements/smart" render={props =>
             isAuthenticated !== null ? (isAuthenticated ? <SmartStatement {...props} /> : <Redirect to="/login" />) : null
           } />
-          <Route exact path="/cards/:id/payment" render={props =>
-            isAuthenticated !== null ? (isAuthenticated ? <PayBill {...props} /> : <Redirect to="/login" />) : null
-          } />
+          <Route component={NotFound} />
         </Switch>
       </Router>
     </>
