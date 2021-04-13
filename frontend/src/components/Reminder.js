@@ -57,7 +57,7 @@ export default function Reminder({ card_id, reminderButton, setReminderExists })
                         <Grid item>
                             <FormControl variant="filled" className={classes.formControl}>
                                 <InputLabel>Day of Month</InputLabel>
-                                <Select name="dates" id="dates" onChange={(e) => setDate(e.target.value)}>
+                                <Select value={date} onChange={(e) => setDate(e.target.value)}>
                                     <MenuItem value='' >''</MenuItem>
                                     <MenuItem value="01">01</MenuItem>
                                     <MenuItem value="02">02</MenuItem>

@@ -7,6 +7,7 @@ import { Card, Grid, CardContent, CardActions, makeStyles, Modal } from '@materi
 import { Button } from '@material-ui/core';
 import { Typography } from '@material-ui/core';
 import { CardMedia } from '@material-ui/core';
+import PayBill from './PayBill';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -31,15 +32,17 @@ export default function CreditCard({ card }) {
     const history = useHistory();
     const [reminderExists, setReminderExists] = useState(false);
     const [setReminder, setSetReminder] = useState(false);
+    const [payOutstanding, setPayOutstanding] = useState(false);
     const buttonClicked = () => {
         history.push({
             pathname: `/cards/${card.card_id}/statements`
         });
     }
     const payBill = () => {
-        history.push({
-            pathname: `/cards/${card.card_id}/payment`
-        });
+        // history.push({
+        //     pathname: `/cards/${card.card_id}/payment`
+        // });
+        setPayOutstanding(true);
     }
     const reminderButton = () => {
         setSetReminder(!setReminder);
@@ -114,7 +117,7 @@ export default function CreditCard({ card }) {
                 >
                     {modalBody}
                 </Modal>
-                <CardMedia style={{margin:"4.25%"}}>
+                <CardMedia style={{ margin: "4.25%" }}>
                     <CreditCards
                         cvc=''
                         expiry={card.expiry_date}
@@ -123,33 +126,40 @@ export default function CreditCard({ card }) {
                         number={card.card_no}
                     />
                 </CardMedia>
-                <CardContent>
-                    <Grid style={{ margin: "4px" }} container direction="row" justify="space-evenly" alignItems="center">
-                        <Grid item>
-                            <Typography color="secondary">
-                                Outstanding: &#8377; {card.outstanding_amount}
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Button size="medium" variant="outlined" color="primary" disabled={!card.outstanding_amount} onClick={payBill}>{card.outstanding_amount ? "Pay Bill" : "Fully Paid"}</Button>
-                        </Grid>
-                    </Grid>
-                </CardContent>
-                <CardActions>
-                    <Grid container direction="column">
-                        <Grid item>
-                            <Button className={classes.btn} size="medium" variant="outlined" color="primary" onClick={buttonClicked}>View Statement</Button>
-                        </Grid>
-                        <Grid item>
-                            {
-                                reminderExists ? (<Button className={classes.btn} size="medium" color="secondary" variant="outlined" onClick={deleteReminder}>Delete Reminder</Button>
-                                ) : (
-                                    <Button className={classes.btn} size="medium" color="primary" variant="outlined" onClick={reminderButton}>{!setReminder ? "Set Reminder" : "Cancel"}</Button>
-                                )
-                            }
-                        </Grid>
-                    </Grid>
-                </CardActions>
+                {payOutstanding ? (
+                    <CardContent>
+                        <PayBill setPayOutstanding={setPayOutstanding} card_id={card.card_id} outstanding={card.outstanding_amount} />
+                    </CardContent>
+                ) : (
+                    <>
+                        <CardContent>
+                            <Grid style={{ margin: "4px" }} container direction="row" justify="space-evenly" alignItems="center">
+                                <Grid item>
+                                    <Typography color="secondary">
+                                        Outstanding: &#8377; {card.outstanding_amount}
+                                    </Typography>
+                                </Grid>
+                                <Grid item>
+                                    <Button size="medium" variant="outlined" color="primary" disabled={!card.outstanding_amount} onClick={payBill}>{card.outstanding_amount ? "Pay Bill" : "Fully Paid"}</Button>
+                                </Grid>
+                            </Grid>
+                        </CardContent>
+                        <CardActions>
+                            <Grid container direction="column">
+                                <Grid item>
+                                    <Button className={classes.btn} size="medium" variant="outlined" color="primary" onClick={buttonClicked}>View Statement</Button>
+                                </Grid>
+                                <Grid item>
+                                    {
+                                        reminderExists ? (<Button className={classes.btn} size="medium" color="secondary" variant="outlined" onClick={deleteReminder}>Delete Reminder</Button>
+                                        ) : (
+                                            <Button className={classes.btn} size="medium" color="primary" variant="outlined" onClick={reminderButton}>{!setReminder ? "Set Reminder" : "Cancel"}</Button>
+                                        )
+                                    }
+                                </Grid>
+                            </Grid>
+                        </CardActions>
+                    </>)}
             </Card>
         </Grid >
     )
