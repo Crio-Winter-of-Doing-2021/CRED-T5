@@ -76,7 +76,7 @@ export default function Login({ setAuth }) {
                             type="submit"
                             fullWidth
                             variant="contained"
-                            color="Primary"
+                            color="primary"
                             className={classes.submit}
                         >
                             Sign In
@@ -86,7 +86,7 @@ export default function Login({ setAuth }) {
                         }
                         <Grid container>
                             <Grid item xs>
-                                <Link style={{ textDecoration: "none" }} href="#" variant="body2">
+                                <Link style={{ textDecoration: "none" }} to="#" variant="body2">
                                     Forgot password?
                                 </Link>
                             </Grid>

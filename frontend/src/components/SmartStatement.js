@@ -66,7 +66,7 @@ export default function SmartStatement({ searchMonth, searchYear }) {
                     <TopCategories categories={categories} />
                 </Container>
             ) : (
-                <Typography>No statements found for entered month and year</Typography>
+                <Typography align="center">No statements found for entered month and year</Typography>
             )
             }
         </>
