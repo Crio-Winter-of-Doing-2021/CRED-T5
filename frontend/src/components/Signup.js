@@ -105,7 +105,7 @@ export default function Signup({ setAuth }) {
                             <Grid item>
                                 <Link to="./login">
                                     Already have an account? Sign in
-                            </Link>
+                                </Link>
                             </Grid>
                         </Grid>
                     </form>
