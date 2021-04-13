@@ -49,9 +49,8 @@ export default function PayBill({ setPayOutstanding, card_id, outstanding }) {
     const classes = useStyles();
     return (
         <Grid container direction="column">
-            <Typography className={classes.setMargin} color="primary">Pay your bills on time to get rewarded!</Typography>
+            {/* <Typography color="primary">Pay your bills on time to get rewarded!</Typography> */}
             <Typography className={classes.setMargin} color="secondary">Total Outstanding: &#8377; {outstanding}</Typography>
-            {/* <label>Enter amount to pay: </label> */}
             <Grid className={classes.setMargin}>
                 <TextField autoFocus className={classes.setMargin} size="small" type="number" variant="outlined" label="Enter Amount to Pay" onChange={(e) => setPayAmount(e.target.value)} required />
                 {errorMessage && <Typography className={classes.setMargin} color="error">{errorMessage}</Typography>}
