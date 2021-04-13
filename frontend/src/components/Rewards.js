@@ -27,7 +27,7 @@ export default function Rewards() {
     }
     useEffect(() => {
         getRewards();
-    }, []);
+    }, [coin_bal,rewards]);
     return (
         <>
             <h1>This is the Rewards page</h1>

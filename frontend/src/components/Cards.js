@@ -3,8 +3,10 @@ import { useState } from 'react';
 import { useHistory } from 'react-router';
 import CreditCard from './CreditCard';
 import { Grid, Button } from '@material-ui/core';
+import {Link} from 'react-router-dom';
 
 export default function Cards({ logout }) {
+    const history = useHistory();
     const [cards, setCards] = useState([]);
     async function getCards() {
         try {
@@ -39,6 +41,7 @@ export default function Cards({ logout }) {
                 </Grid>
                 <Grid align="right" style={{margin:"2%"}}>
                     <Button onClick={addCard}>Add Card</Button>
+                    <Button component={Link} to="/rewards">Rewards</Button>
                     <Button onClick={logout}>Logout</Button>
                 </Grid>
             </Grid>
