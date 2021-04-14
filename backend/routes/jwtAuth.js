@@ -15,12 +15,12 @@ router.post('/signup', require('../middleware/validate'), async (req, res) => {
         }
 
         // If user does not already exist, hash password (do before final deployment)
-        // const saltRound = 10;
-        // const salt = await bcrypt.genSalt(saltRound);
-        // const bcryptPassword = await bcrypt.hash(password, salt);
+        const saltRound = 10;
+        const salt = await bcrypt.genSalt(saltRound);
+        const bcryptPassword = await bcrypt.hash(password, salt);
 
         // Save user in database
-        const newUser = await pool.query(`INSERT INTO users(user_id, first_name, last_name, email, password) VALUES('${uuidv4()}', '${first_name}', '${last_name}', '${email}', '${password}') RETURNING *`);
+        const newUser = await pool.query(`INSERT INTO users(user_id, first_name, last_name, email, password) VALUES('${uuidv4()}', '${first_name}', '${last_name}', '${email}', '${bcryptPassword}') RETURNING *`);
 
         // Send back user_id of the registered user
         res.status(201).send({ user_id: newUser.rows[0].user_id });
@@ -43,15 +43,11 @@ router.post('/login', require('../middleware/validate'), async (req, res) => {
         }
 
         // if the user exists, match the entered password with the password in database
-        if (user.rows[0].password !== password) {
-            return res.status(401).send({ message: "Password Incorrect" }); // delete this code and uncomment below code before final submission
-        }
 
-        // # Uncomment the below three lines only when hashing is to be enabled for the passwords
-        // const validPassword = await bcrypt.compare(password, user.rows[0].user_password);
-        // if (!validPassword) {
-        //     return res.status(401).send("Email or password is incorrect");
-        // }
+        const validPassword = await bcrypt.compare(password, user.rows[0].password);
+        if (!validPassword) {
+            return res.status(401).send({ message: "Email or password is incorrect" });
+        }
 
         // Return the jwt token
         const access_token = jwtGenerator(user.rows[0].user_id);
@@ -68,7 +64,7 @@ router.post('/verify', require('../middleware/auth'), async (req, res) => {
         res.json(true);
     } catch (err) {
         console.log(err.message);
-        res.status(500).send("Internal Server Error");
+        res.status(500).send({ message: "Internal Server Error" });
     }
 })
 
