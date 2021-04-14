@@ -5,7 +5,9 @@ import CreditCard from './CreditCard';
 import { Grid, Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 
+
 export default function Cards({ logout }) {
+    const [track, setTrack] = useState(0);
     const history = useHistory();
     const [cards, setCards] = useState([]);
     async function getCards() {
@@ -27,7 +29,7 @@ export default function Cards({ logout }) {
     }
     useEffect(() => {
         getCards();
-    }, [cards]);
+    }, [track]);
     const addCard = () => {
         history.push({
             pathname: "/cards/add"
@@ -50,7 +52,7 @@ export default function Cards({ logout }) {
                     {cards.map(card => {
                         return (
                             <Grid item key={card.card_id}>
-                                <CreditCard key={card.card_id} card={card} />
+                                <CreditCard key={card.card_id} card={card} track={track} setTrack={setTrack} />
                             </Grid>
                         );
                     })}

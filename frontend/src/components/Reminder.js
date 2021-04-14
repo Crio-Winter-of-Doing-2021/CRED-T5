@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Reminder({ card_id, reminderButton, setReminderExists }) {
+export default function Reminder({ card_id, reminderButton, setReminderExists, setTrack, track }) {
     const classes = useStyles();
     const [date, setDate] = useState('');
     const [hours, setHours] = useState('');
@@ -22,6 +22,7 @@ export default function Reminder({ card_id, reminderButton, setReminderExists })
     const setReminder = async (e) => {
         e.preventDefault();
         try {
+            setTrack(track + 1);
             const reminder_time = `${date}-${hours}-${minutes}`;
             const body = { card_id: card_id, reminder_time: reminder_time };
             const token = localStorage.token;
@@ -93,15 +94,15 @@ export default function Reminder({ card_id, reminderButton, setReminderExists })
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item style={{margin:"10px"}}>
+                        <Grid item style={{ margin: "10px" }}>
                             <TextField type="text" placeholder="HH (24 hrs)" size="small" onChange={(e) => setHours(e.target.value)} />
                         </Grid>
-                        <Grid item style={{margin:"10px"}}>
+                        <Grid item style={{ margin: "10px" }}>
                             <TextField type="text" placeholder="MM (minutes)" size="small" onChange={(e) => setMinutes(e.target.value)} />
                         </Grid>
                         {errorMessage && <Typography color="error">{errorMessage}</Typography>}
                     </Grid>
-                    <Grid align="center" style={{margin: "20px auto"}}>
+                    <Grid align="center" style={{ margin: "20px auto" }}>
                         <Button variant="outlined" color="primary" type="submit">Set Reminder</Button>
                     </Grid>
                 </Grid>

@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function CreditCard({ card }) {
+export default function CreditCard({ card, track, setTrack }) {
     const classes = useStyles();
     const history = useHistory();
     const [reminderExists, setReminderExists] = useState(false);
@@ -81,6 +81,7 @@ export default function CreditCard({ card }) {
                 }
             });
             const parseRes = await response.json();
+            setTrack(track+1);
             if (parseRes.message === "Delete Successful")
                 setReminderExists(false);
         } catch (err) {
@@ -104,7 +105,7 @@ export default function CreditCard({ card }) {
 
     const modalBody = (
         <div style={modalStyle} className={classes.paper}>
-            <Reminder card_id={card.card_id} reminderButton={reminderButton} setReminderExists={setReminderExists} />
+            <Reminder card_id={card.card_id} reminderButton={reminderButton} setReminderExists={setReminderExists} track={track} setTrack={setTrack} />
         </div>
     );
 
@@ -128,7 +129,7 @@ export default function CreditCard({ card }) {
                 </CardMedia>
                 {payOutstanding ? (
                     <CardContent>
-                        <PayBill setPayOutstanding={setPayOutstanding} card_id={card.card_id} outstanding={card.outstanding_amount} />
+                        <PayBill setPayOutstanding={setPayOutstanding} card_id={card.card_id} outstanding={card.outstanding_amount} track={track} setTrack={setTrack} />
                     </CardContent>
                 ) : (
                     <>

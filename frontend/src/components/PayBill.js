@@ -4,12 +4,12 @@ import { Redirect } from 'react-router-dom';
 import { makeStyles, Grid, Typography, Button, TextField } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
-    setMargin:{
+    setMargin: {
         margin: "6px"
     }
 }));
 
-export default function PayBill({ setPayOutstanding, card_id, outstanding }) {
+export default function PayBill({ setPayOutstanding, card_id, outstanding, setTrack, track }) {
     // const history = useHistory();
     // const location = useLocation();
     // const params = location.pathname.split('/');
@@ -23,6 +23,7 @@ export default function PayBill({ setPayOutstanding, card_id, outstanding }) {
     }
     const pay = async () => {
         try {
+            setTrack(track + 1);
             const body = { amount: payAmount };
             const token = await localStorage.token;
             const response = await fetch(`http://localhost:8080/cards/${card_id}/pay`, {
