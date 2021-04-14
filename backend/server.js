@@ -3,11 +3,15 @@ const cors = require('cors');
 const pool = require('./db');
 const cron = require('node-cron');
 const nodemailer = require('nodemailer');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDoc = require('./swagger.json');
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
+
+app.use('/swagger-ui', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 // test connection with backend
 app.get('/', async (req, res) => {
