@@ -2,6 +2,7 @@
 Team ID: CRED-T5 | Team Members: [Chinmay Chougaonkar](https://github.com/chinmay0402) &amp; [Ayush Gupta](https://github.com/ayush-0101)
 
 **Key Points:**
+- The project fulfills both P0 and P1 requirements completely
 - Both back-end and front-end are publicly deployed in an AWS EC2 instance
 - [Back-end URL](http://ec2-3-16-46-99.us-east-2.compute.amazonaws.com:8080/)
 - [Front-end URL](http://ec2-3-16-46-99.us-east-2.compute.amazonaws.com:3000/)
@@ -9,7 +10,7 @@ Team ID: CRED-T5 | Team Members: [Chinmay Chougaonkar](https://github.com/chinma
 
 **Tech-Stack used:**
 - Back-end: *NodeJS*, *ExpressJS*
-- Frontend: *React*
+- Front-end: *ReactJS*
 - Database: *PostgreSQL*
 - Testing library: *Jest*
 
