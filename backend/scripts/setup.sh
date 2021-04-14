@@ -1,11 +1,13 @@
 #!/bin/sh
 
+## Enable NodeSource repository for nodejs 12 ##
+curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+
 ## Update package manager ##
 sudo apt-get update
 
 ## Install dependencies ##
 sudo apt-get install -y nodejs
-sudo apt-get install -y npm
 sudo apt-get install -y postgresql
 
 ## Start Database Server ##
