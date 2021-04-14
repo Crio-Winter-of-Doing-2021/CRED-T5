@@ -102,7 +102,7 @@ router.get('/bought', auth, async (req, res) => {
                 buy_date: bought_reward.buy_date
             });
         });
-        return res.status(200).send(bought_rewards);
+        return res.status(200).send({bought_rewards:bought_rewards});
     } catch (err) {
         console.log(err.message);
         return res.status(500).send({ message: "Internal Server Error" });
