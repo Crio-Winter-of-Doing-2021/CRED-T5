@@ -1,0 +1,389 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "API documentation of CWoD CRED Project powered by Swagger",
+    "version": "1.0.0",
+    "title": "CWoD CRED-T5 API",
+    "contact": {
+      "email": "chinmay0402@gmail.com"
+    }
+  },
+  "schemes": [
+    "http"
+  ],
+  "host": "localhost:8080",
+  "basePath": "/",
+  "paths": {
+    "/login": {
+      "post": {
+        "summary": "Login using email and password",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "access_token": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Bad credentials",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/signup": {
+      "post": {
+        "summary": "Register as a new user",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "first_name": {
+                  "type": "string"
+                },
+                "last_name": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Sign up successful",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user_id": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Email already in use",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cards": {
+      "get": {
+        "summary": "Retrieve all cards of the user",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT token for authorization",
+            "required": true,
+            "type": "string",
+            "format": "Bearer <access_token>"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "properties": {
+                  "card_id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "card_no": {
+                    "type": "string"
+                  },
+                  "expiry_date": {
+                    "type": "string"
+                  },
+                  "name_on_card": {
+                    "type": "string"
+                  },
+                  "outstanding_amount": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Add a credit card",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT token for authorization",
+            "required": true,
+            "type": "string",
+            "format": "Bearer <access_token>"
+          },
+          {
+            "in": "body",
+            "name": "",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "card_no": {
+                  "type": "string"
+                },
+                "expiry_date": {
+                  "type": "string"
+                },
+                "name_on_card": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Credit card added",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "card_id": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Card already exists",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cards/{id}/statements": {
+      "get": {
+        "summary": "Retrieve the most recent statement for a card",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT token for authorization",
+            "required": true,
+            "type": "string",
+            "format": "Bearer <access_token>"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the card",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "No statement found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cards/{id}/statements/{year}/{month}": {
+      "get": {
+        "summary": "View statement for a card against a particular month"
+      },
+      "post": {
+        "summary": "Add statement for a card against a particular month"
+      }
+    },
+    "/cards/{id}/statements/smart": {
+      "get": {
+        "summary": "View smart statement with insights for the most recent statement"
+      }
+    },
+    "/cards/{id}/statements/smart/{year}/{month}": {
+      "get": {
+        "summary": "View smart statement with insights for a particular month's statement"
+      }
+    },
+    "/cards/{id}/pay": {
+      "post": {
+        "summary": "Pay amount against the most recent statement"
+      }
+    },
+    "/rewards": {
+      "post": {
+        "summary": "Add a reward"
+      },
+      "get": {
+        "summary": "View all rewards in the system"
+      }
+    },
+    "/rewards/buy/{id}": {
+      "post": {
+        "summary": "Buy a reward using coin balance"
+      }
+    },
+    "/rewards/bought": {
+      "get": {
+        "summary": "View all bought rewards of a user"
+      }
+    },
+    "/cards/{id}/reminder": {
+      "post": {
+        "summary": "Add reminder for a card for timely bill payment"
+      },
+      "delete": {
+        "summary": "Delete reminder set for a card"
+      }
+    }
+  }
+}

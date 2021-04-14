@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "jest",
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "setup": "sh scripts/setup.sh && npm install"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,8 @@
     "nodemailer": "^6.5.0",
     "pg": "^8.5.1",
     "pg-hstore": "^2.3.3",
+    "swagger-jsdoc": "^7.0.0-rc.6",
+    "swagger-ui-express": "^4.1.6",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
