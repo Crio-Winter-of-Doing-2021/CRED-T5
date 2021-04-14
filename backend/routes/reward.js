@@ -11,12 +11,12 @@ router.post('/', async (req, res) => {
         // check if already exists
         const sameReward = await pool.query(`SELECT * FROM rewards WHERE code = '${code}' OR body = '${body}'`);
         if (sameReward.rows.length > 0) {
-            return res.status(409).send({ message: "Same reward exists"});
+            return res.status(409).send({ message: "Same reward exists" });
         }
         // add the reward
         const added_reward = await pool.query(`INSERT INTO rewards(code, body, count_available, cost) VALUES('${code}', '${body}', '${count_available}', '${cost}') RETURNING *`);
         const reward_id = added_reward.rows[0].reward_id;
-        return res.status(201).send({reward_id});
+        return res.status(201).send({ reward_id });
     } catch (err) {
         console.log(err.message);
         return res.status(500).send({ message: "Internal Server Error" });
@@ -25,6 +25,7 @@ router.post('/', async (req, res) => {
 
 router.get('/', auth, async (req, res) => {
     try {
+        const { user_id } = req.userDataFromJWT;
         const reward_res = await pool.query(`SELECT * FROM rewards WHERE count_available > 0`);
         let rewards = [];
         reward_res.rows.forEach(reward => {
@@ -35,7 +36,9 @@ router.get('/', auth, async (req, res) => {
                 cost: reward.cost
             });
         });
-        return res.status(200).send(rewards);
+        const coin_bal_res = await pool.query(`SELECT coins FROM users WHERE user_id = '${user_id}'`);
+        const coin_bal = coin_bal_res.rows[0].coins;
+        return res.status(200).send({ rewards: rewards, coin_bal: coin_bal });
     } catch (err) {
         console.log(err.message);
         return res.status(500).send({ message: "Internal Server Error" });
@@ -78,7 +81,7 @@ router.post('/buy/:id', auth, async (req, res) => {
         const new_count_available = reward.count_available - 1;
         await pool.query(`UPDATE users SET coins = '${updated_coin_bal}' WHERE user_id = '${user_id}'`);
         await pool.query(`UPDATE rewards SET count_available = ${new_count_available} WHERE reward_id = '${reward_id}'`);
-        return res.status(201).send({bought_reward_id});
+        return res.status(201).send({ bought_reward_id });
     } catch (err) {
         console.log(err.message);
         return res.status(500).send({ message: "Internal Server Error" });
@@ -99,7 +102,7 @@ router.get('/bought', auth, async (req, res) => {
                 buy_date: bought_reward.buy_date
             });
         });
-        return res.status(200).send(bought_rewards);
+        return res.status(200).send({bought_rewards:bought_rewards});
     } catch (err) {
         console.log(err.message);
         return res.status(500).send({ message: "Internal Server Error" });
