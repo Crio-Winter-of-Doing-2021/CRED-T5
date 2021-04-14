@@ -86,7 +86,7 @@ export default function BoughtRewards({ logout }) {
 
             </Grid>
             <Grid style={{ marginBottom: "30px" }}>
-                <Typography color="primary" variant="h4">redeem your cred coins for exciting rewards!</Typography>
+                <Typography color="primary" variant="h4">get rewarded for paying your bills on time</Typography>
             </Grid>
             <Grid item md={8}>
                 <TableContainer component={Paper}>
@@ -100,6 +100,7 @@ export default function BoughtRewards({ logout }) {
                         </TableHead>
                         <TableBody>
                             {boughtRewards
+                                .sort((a, b) => (a.buy_date < b.buy_date) ? 1 : -1)
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((boughtReward) => {
                                     return (
