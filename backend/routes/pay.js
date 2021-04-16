@@ -45,9 +45,9 @@ router.post('/', auth, async (req, res) => {
         await pool.query(`UPDATE cards SET outstanding_amount = '${new_outstanding}' WHERE card_id = '${card_id}'`);
         let coin_bal_res = await pool.query(`SELECT coins from users WHERE user_id = '${user_id}'`);
         let coin_bal = coin_bal_res.rows[0].coins;
-        console.log(coin_bal);
+//         console.log(coin_bal);
         let new_coin_bal = parseInt(coin_bal) + parseInt(coins_earned);
-        console.log(new_coin_bal);
+//         console.log(new_coin_bal);
         await pool.query(`UPDATE users SET coins = ${new_coin_bal} WHERE user_id = '${user_id}'`);
         const payment_id = payment.rows[0].payment_id;
         return res.status(201).send({ payment_id });
