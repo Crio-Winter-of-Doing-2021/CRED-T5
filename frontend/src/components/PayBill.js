@@ -23,7 +23,6 @@ export default function PayBill({ setPayOutstanding, card_id, outstanding, setTr
     }
     const pay = async () => {
         try {
-            setTrack(track + 1);
             const body = { amount: payAmount };
             const token = await localStorage.token;
             const response = await fetch(`http://localhost:8080/cards/${card_id}/pay`, {
@@ -39,6 +38,7 @@ export default function PayBill({ setPayOutstanding, card_id, outstanding, setTr
             if (parseRes.message === undefined) {
                 setPaymentSuccessful(true);
                 setPayOutstanding(false);
+                setTrack(track + 1);
             }
             else {
                 setErrorMessage(parseRes.message);
